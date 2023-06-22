@@ -29,6 +29,17 @@ pipeline {
                 sh 'docker push jeeva1806/myappimage:0.0.1'
             }
         }
+        stage ('Remove Previous Container'){
+            steps {
+                script {
+                    try {
+                        sh 'docker rm -f myapp'
+                    }
+                    catch (error){
+                    }
+                }
+            }
+        }
         stage ('Docker Deploy'){
             steps {
                 sh 'docker run -itd --name myapp -p "8070:8080" jeeva1806/myappimage:0.0.1'
