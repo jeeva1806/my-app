@@ -42,7 +42,7 @@ pipeline {
         }
         stage ('Docker Deploy'){
             steps {
-                sh 'docker run -itd --name myapp -p "8070:8080" jeeva1806/myappimage:0.0.1'
+                sh 'docker run -itd --network=myhttpd_network --name myapp -p "8070:8080" jeeva1806/myappimage:0.0.1'
             }
         }
     }
