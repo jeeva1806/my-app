@@ -14,7 +14,7 @@ pipeline {
         }
         stage ('Maven Build'){
             steps {
-                sh '/opt/apache-maven-3.8.5/bin/mvn package'
+                sh "${mymaven}/bin/mvn package"
                 sh 'mv target/myweb*.war target/newapp.war'
             }
         }
