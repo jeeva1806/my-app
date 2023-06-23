@@ -5,6 +5,7 @@ pipeline {
     }
     environment {
         DOCKER_PASSWORD = credentials('Docker')
+        AWS_ACCOUNT = credentials('AWS-ACCOUNT')
     }
     stages {
         stage ('SVM Checkout'){
@@ -31,10 +32,12 @@ pipeline {
                 sh 'docker push jeeva1806/myappimage:0.0.1'
             }
         }
-        stage ('ECR Repo Image Push'){
+        stage('Push to ECR') {
             steps {
                 script {
-                    sh 'docker push 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
+                    docker.withRegistry('https://403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp', 'ecr:ap-south-1') {
+                        sh 'docker push 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
+                    }
                 }
             }
         }
