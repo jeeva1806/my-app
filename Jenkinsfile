@@ -33,8 +33,10 @@ pipeline {
         }
         stage ('ECR Repo Image Push'){
             steps {
-                sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 403018566018.dkr.ecr.ap-south-1.amazonaws.com'
-                sh 'docker push 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
+                script {
+                    sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 403018566018.dkr.ecr.ap-south-1.amazonaws.com'
+                    sh 'docker push 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
+                }
             }
         }
         stage ('Remove Previous Container'){
