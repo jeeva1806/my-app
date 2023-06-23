@@ -20,13 +20,21 @@ pipeline {
         }
         stage ('Dcoker Image Build'){
             steps {
-                sh 'docker build -t jeeva1806/myappimage:0.0.1 .'
+                sh 'docker build -t myapp:0.0.1 .'
+                sh 'docker tag myapp:0.0.1 jeeva1806/myappimage:0.0.1'
+                sh 'docker tag myapp:0.0.1 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
             }
         }
         stage ('Docker Image Push'){
             steps {
                 sh "docker login -u jeeva1806 -p ${DOCKER_PASSWORD}"
                 sh 'docker push jeeva1806/myappimage:0.0.1'
+            }
+        }
+        stage ('ECR Repo Image Push'){
+            steps {
+                sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 403018566018.dkr.ecr.ap-south-1.amazonaws.com'
+                sh 'docker push 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
             }
         }
         stage ('Remove Previous Container'){
@@ -42,7 +50,7 @@ pipeline {
         }
         stage ('Docker Deploy'){
             steps {
-                sh 'docker run -itd --network=myhttpd_network --name myapp -p "8070:8080" jeeva1806/myappimage:0.0.1'
+                sh 'docker run -itd --network=myhttpd_network --name myapp -p "8070:8080" myapp:0.0.1'
             }
         }
     }
