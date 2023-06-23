@@ -34,7 +34,6 @@ pipeline {
         stage ('ECR Repo Image Push'){
             steps {
                 script {
-                    sh 'docker login -u AWS -p $(aws ecr get-login-password --region ap-south-1) 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp'
                     sh 'docker push 403018566018.dkr.ecr.ap-south-1.amazonaws.com/myapp:0.0.1'
                 }
             }
